@@ -44,24 +44,33 @@ write_description([Book|T]) :-
 % have it print only top 5 results (URL would have & maxResults=5 added)
 % have it print title, author and description
 
+ 
 
 % TODO:
-% function for url building, not tested, just in draft mode
+% example query: create_url(["harry", "potter"], URL).
+% Create a URL for search term
 
-% need special case for first case 
-append_search_term([], _).
+create_url(Terms, URL) :-
+    url_root(Root),
+    append_search_term(Terms, Root, URL).
 
-append_search_term([Term|T], url) :-
-    string_concat(url, Term, url1),
-    string_concat(url1,"+",url_final),
-    append_search_term(T, url_final).
+% base case
+append_search_term([], URL, URL).
 
-% need special case for last case
-% last case needs to attach the api key instead of plus
-append_search_term([Last], url) :-
-    string_concat(url, Last, url1),
-    string_concat(url1, "&key=", url2),
-    string_concat(url2, apikey, url_final).
+% append last search term and API key to URL
+append_search_term([Last], URL, URL_final) :-
+    apikey(Key),
+    string_concat(URL, Last, URL1),
+    string_concat(URL1, "&key=", URL2),
+    string_concat(URL2, Key, URL_final).
+
+% recursive case: append next search term
+append_search_term([Term|T], URL, URL_final) :-
+    string_concat(URL, Term, URL1),
+    string_concat(URL1,"+",URL2),
+    append_search_term(T, URL2, URL_final).
+
+
     
 
 

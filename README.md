@@ -1,7 +1,7 @@
 # CPSC-312-Book-Recommender
 Authors: Gloria Mo, Christine Yang, Carmen Yu
 
-Created for UBC CPSC 312 2022W.
+Created for UBC CPSC 312 2023W.
 
 # Description
 TODO
