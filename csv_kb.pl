@@ -48,6 +48,5 @@ add_book(ID,Title,Author,Description,Genres):-
 % adds the predicate for each genre
 add_genre(_,[]).
 add_genre(ID, [H|T]):-
-    downcase_atom(H, H1),
-    assert(book(ID, genre, H1)),
+    assert(book(ID, genre, H)),
     add_genre(ID, T).
