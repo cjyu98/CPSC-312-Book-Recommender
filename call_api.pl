@@ -1,28 +1,9 @@
-% calls and prints the results from calling the API
+% calls and prints the results from the API
 
-% library - will likely need to move into main file
-:- use_module(library(http/http_open)).
-:- use_module(library(http/json)).
-:- use_module(library(lists)).
+%% API %%
 
-% encoding to process the text & accents from csv file properly
-% reference: https://swi-prolog.discourse.group/t/pcemacs-strips-some-accents-on-save-solved/1595/11
-:- set_prolog_flag(encoding, utf8).
-
-
-% Constants
-apikey("AIzaSyCDCSCwN5M95LfkkLtw5wQ8kkaRA-wBYqM"). % linked to Carmen's Google account
-url_root("https://www.googleapis.com/books/v1/volumes?q=").
-
-
-% current test case: 
-    % calling the api for searching the book "The Goldfinch"
-    % testing URL: https://www.googleapis.com/books/v1/volumes?q=the+goldfinch&key=AIzaSyCDCSCwN5M95LfkkLtw5wQ8kkaRA-wBYqM
-    % click URL to see how the JSON file returns
-    % query: call_api("https://www.googleapis.com/books/v1/volumes?q=the+goldfinch&key=AIzaSyCDCSCwN5M95LfkkLtw5wQ8kkaRA-wBYqM").
-    % every search term we parse must append a +
-
-% call the api to print out the top 5 results
+% test query: call_api("https://www.googleapis.com/books/v1/volumes?q=the+goldfinch&key=AIzaSyCDCSCwN5M95LfkkLtw5wQ8kkaRA-wBYqM"). 
+% call the api, parses the returned JSON file to print out the top 5 results
 call_api(URL) :- 
     write('Calling GoogleBooks API'),
     write("\n\n"),
@@ -69,15 +50,12 @@ write_author([H|T]) :-
     write_author(T).
 
 % TODO:
-% have it print only top 5 results (URL would have & maxResults=5 added)
+% have it print only top 5 results (URL would have &maxResults=5 added)
 
+%% Building URL %%
 
- 
-
-% TODO:
 % example query: create_url(["harry", "potter"], URL).
-% Create a URL for search term
-
+% creates a URL for search term
 create_url(Terms, URL) :-
     url_root(Root),
     append_search_term(Terms, Root, URL).
