@@ -17,6 +17,7 @@ url_root('https://www.googleapis.com/books/v1/volumes?q=').
 % import files
 :- [call_api].
 :- [csv_kb].
+:- [recommend].
 
 
 % initialize knowledge base
@@ -44,9 +45,10 @@ main_menu:-
 
 % checks the user input and directs to appropriate calls
 
-% TODO: recommendation case once other file is done
-% check_ans(0):- 
-%  call the other file
+% recommendation case
+check_ans(0):- 
+    [recommend],
+    start_rec.
 
 % TODO: search API case once other file is done
 % check_ans(1):-

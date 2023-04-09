@@ -47,5 +47,3 @@ add_genre(_,[]).
 add_genre(ID, [H|T]):-
     assert(book(ID, genre, H)),
     add_genre(ID, T).
-
-

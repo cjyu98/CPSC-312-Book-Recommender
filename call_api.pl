@@ -103,13 +103,10 @@ write_genre([Book|_]) :-
     write('Genre(s): '),
     write_list(Genre).
 
-% TODO:
-% have it print only top 5 results (URL would have &maxResults=5 added)
 
-%% Building URL %%
-
+% Create a URL for search term
 % example query: create_url(["harry", "potter"], URL).
-% creates a URL for search term
+
 create_url(Terms, URL) :-
     url_root(Root),
     append_search_term(Terms, Root, URL).
@@ -121,7 +118,7 @@ append_search_term([], URL, URL).
 append_search_term([Last], URL, URL_final) :-
     apikey(Key),
     string_concat(URL, Last, URL1),
-    string_concat(URL1, "&key=", URL2),
+    string_concat(URL1, "&maxResults=5&key=", URL2),
     string_concat(URL2, Key, URL_final).
 
 % recursive case: append next search term
