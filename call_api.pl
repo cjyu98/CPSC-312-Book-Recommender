@@ -28,26 +28,80 @@ write_results([Book|T]) :-
     % writes title
     string_concat('Title: ', Title, Title1),
     writeln(Title1),
-
+    
     % writes author
     write('Author(s): '),
-    write_author(Author),
+    write_list(Author),
     write("\n"),
 
     % writes description
     string_concat('Description: ', Description, Description1),
     write(Description1),
     write("\n\n"),
-
+    
     % recursive call
     write_results(T).
 
+/*
 % writes out the authors since it is a list
 write_author([]).
 write_author([H|T]) :-
     write(H),
     write(","),
     write_author(T).
+*/
+
+% writes out the list
+write_list([]).
+write_list([H|T]) :-
+    write(H),
+    write(", "),
+    write_list(T).   
+
+% call api to print out book arthor
+call_api_author(URL) :-
+    http_open(URL, Input_stream, []),
+ 	json_read_dict(Input_stream, Dict),
+ 	close(Input_stream),
+    json_to_book_description(Dict, Books),
+    write_author_name(Books).
+
+% writes out the author name
+write_author_name([]).
+write_author_name([Book|_]) :-
+    Author = Book.volumeInfo.authors,
+    write('Author(s): '),
+    write_list(Author).
+
+% call api to print out book title
+call_api_title(URL) :-
+    http_open(URL, Input_stream, []),
+ 	json_read_dict(Input_stream, Dict),
+ 	close(Input_stream),
+    json_to_book_description(Dict, Books),
+    write_title(Books).
+
+% writes out the book title
+write_title([]).
+write_title([Book|_]) :-
+    Title = Book.volumeInfo.title,
+    write('Title: '),
+    write(Title).
+
+% call api to print out book genre
+call_api_genre(URL) :-
+    http_open(URL, Input_stream, []),
+ 	json_read_dict(Input_stream, Dict),
+ 	close(Input_stream),
+    json_to_book_description(Dict, Books),
+    write_genre(Books).
+
+% writes out the book genre
+write_genre([]).
+write_genre([Book|_]) :-
+    Genre = Book.volumeInfo.categories,
+    write('Genre(s): '),
+    write_list(Genre).
 
 % TODO:
 % have it print only top 5 results (URL would have &maxResults=5 added)
