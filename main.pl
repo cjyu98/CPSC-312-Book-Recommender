@@ -18,6 +18,7 @@ url_root('https://www.googleapis.com/books/v1/volumes?q=').
 :- [call_api].
 :- [csv_kb].
 :- [recommend].
+:- [search].
 
 
 % initialize knowledge base
@@ -51,8 +52,9 @@ check_ans(0):-
     start_rec.
 
 % TODO: search API case once other file is done
-% check_ans(1):-
+check_ans(1):-
     % call the other file
+    [search].
 
 
 % exit case
