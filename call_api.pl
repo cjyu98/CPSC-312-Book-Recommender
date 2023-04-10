@@ -104,6 +104,8 @@ write_genre([Book|_]) :-
     write_list(Genre).
 
 
+%% Building URL %%
+
 % Create a URL for search term
 % example query: create_url(["harry", "potter"], URL).
 

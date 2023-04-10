@@ -32,6 +32,7 @@ add_book(_,_,_,_,'',_,_).
 add_book(_,_,_,_,_,'',_).
 add_book(_,_,_,_,_,_,'').
 
+% main case
 add_book(ID,Title,Author,Rating, Description,Genres, Pages):-
     assert(book(ID, title, Title)),
     assert(book(ID, author, Author)),

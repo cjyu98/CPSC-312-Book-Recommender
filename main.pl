@@ -47,8 +47,8 @@ main_menu:-
 
 % recommendation case
 check_ans(0):- 
-    [recommend],
-    start_rec.
+    start_rec, nl,
+    main_menu.
 
 % TODO: search API case once other file is done
 % check_ans(1):-

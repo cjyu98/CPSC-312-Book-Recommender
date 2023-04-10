@@ -8,21 +8,20 @@
 
 start_rec :- 
     nl, nl,
-    write('Welcome to the book recommendation system. Please answer the following questions!'), nl, nl,
-    ask_genre, nl,
-    read(AnsGenre), nl,
-    ask_pages, nl,
-    read(AnsPages), nl,
-    ask_rating, nl,
-    read(AnsRating), nl,
+    write('Welcome to the book recommendation system. We will recommend 5 books from a collection of best books from Goodreads. Please answer the following questions by entering the corresponding number followed by a period!'), nl, nl,
+    ask_genre(AnsGenre), nl,
+    ask_pages(AnsPages), nl,
+    ask_rating(AnsRating), nl,
     write('Please wait momentarily while we browse our library...'), nl,
     write('We recommend the following books: '), nl, nl,
     forall(limit(5, distinct(recommend(AnsGenre, AnsPages, AnsRating, B, A))),
     (atomic_list_concat([B, A], ' written by ', F),
     write(F), nl)).
 
+%% GENRE %%
 
-ask_genre :-
+% asks the genre options
+ask_genre(AnsGenre) :-
     write('What book genre are you interested in?'), nl,
     write('1. Fiction'),nl,
     write('2. Science Fiction'),nl,
@@ -33,22 +32,60 @@ ask_genre :-
     write('7. Thriller'),nl,
     write('8. Mystery'),nl,
     write('9. Adventure'),nl,
-    write('0. Classics'),nl.
+    write('0. Classics'),nl,
+    read(Ans), nl,
+    (check_ans_genre(Ans)
+        -> AnsGenre is Ans
+        ; writeln('Invalid input! Please try again.'),nl,
+          ask_genre(AnsGenre)
+    ).
 
+% checks input for the genre
+check_ans_genre(Ans) :- 
+    member(Ans, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).
 
-ask_pages :-
+%% PAGES %%
+
+% asks the pages options
+ask_pages(AnsPages) :-
     write('What pages are you looking for?'), nl,
     write('1. Less than 200 pages'),nl,
     write('2. 200 to 400 pages'),nl,
-    write('3. More than 400 pages').
+    write('3. More than 400 pages'),nl,
+    read(Ans), nl,
+    (check_ans_pages(Ans)
+        -> AnsPages is Ans
+        ; writeln('Invalid input! Please try again.'),nl,
+          ask_pages(AnsPages)
+    ).
+
+%checks input for the number of pages
+check_ans_pages(Ans) :- 
+    member(Ans, [1, 2, 3]).
 
 
-ask_rating :-
+%% RATING %%
+
+% asks the rating options
+ask_rating(AnsRating) :-
     write('Do you prefer books with higher ratings?'), nl,
-    write('1. Yes (3.5 stars and above)'),nl,
-    write('2. No (less than 3.5 stars)').
+    write('1. Yes (4 stars and above)'),nl,
+    write('2. No  (less than 4 stars)'), nl,
+    read(Ans), nl,
+    (check_ans_rating(Ans)
+        -> AnsRating is Ans
+        ; writeln('Invalid input! Please try again.'),nl,
+          ask_rating(AnsRating)
+    ).
+
+% checks input for the rating
+check_ans_rating(Ans) :- 
+    member(Ans, [1, 2]).
 
 
+%% Finding Predicates %%
+
+% genre
 question_genre(1, ID) :-
     book(ID, genre, 'Fiction').
 
@@ -79,13 +116,8 @@ question_genre(9, ID) :-
 question_genre(0, ID) :-
     book(ID, genre, 'Classics').
 
-% invaid genre case
-% invalid_genre(Op):-
-  %  nonmember(Op, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
-    % writeln('Input not applicable. Please re-enter.'), nl,
-    % ask_genre.
 
-
+% pages
 
 question_pages(1, ID) :-
     book(ID, pages, P),
@@ -100,30 +132,20 @@ question_pages(3, ID) :-
     book(ID, pages, P),
     P > 400.
 
-% invaid pages case
-% question_pages(Op, _):-
- %   nonmember(Op, [1, 2, 3]),
-  %  writeln('Input not applicable. Please re-enter.'), nl,
-   % ask_pages.
-
+% rating
 
 question_rating(1, ID) :-
     book(ID, rating, R),
-    R > 3.5.
+    R > 4.
 
 question_rating(2, ID) :-
     book(ID, rating, R),
-    R < 3.5.
-
-% invaid rating case
-% question_rating(Op, _):-
-  %  nonmember(Op, [1, 2]),
-   % writeln('Input not applicable. Please re-enter.'), nl,
-    % ask_rating.
+    R < 4.
 
 
+% recommend based on answers
 recommend(AnsGenre, AnsPages, AnsRating, BookTitle, Author) :-
-    init_books,
+    %init_books, % remove as we integrate into main
     book(ID, title, BookTitle),
     book(ID, author, Author),
     question_genre(AnsGenre, ID),
