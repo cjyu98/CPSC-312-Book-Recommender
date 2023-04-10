@@ -18,18 +18,23 @@ noun_phrase(L0,L3) :-
 
 % a verb phrase is a verb followed by a noun phrase and an optional pp
 verb_phrase(L0,L2) :- 
-   verb(L0,L1), 
+   verb(L0,L1),
    key_words(L1,L2).
 
 
 verb(["written", "by" | L],L) :-
     search_title(L).
+verb(["are", "written", "by" | L],L) :-
+    search_genre(L).
 verb(["wrote" | L],L) :-
     search_author(L).
+verb(["are"| L], L).
 verb(L,L).
 
 
 noun(["book" | L],L).
+noun(["a", "book" | L],L).
+noun(["books" | L],L).
 % noun(["name", "of" | L] L).
 noun(L,L).
 
@@ -55,21 +60,27 @@ sentence(L0,L2) :-
 % DICTIONARY
 % adj(L0,L1) is true if L0-L1 is an adjective
 adj(["interesting" | L],L).
-adj(["cool" | L],L).
+adj(["exciting" | L],L).
 adj(["first" | L],L).
+adj(["title", "of" | L],L).
+adj(["some" | L], L).
+adj(["more" | L], L).
 
-
+key_words(["information", "about" | L],L) :-
+    search_description(L).
 key_words(["author", "of" | L],L) :-
     search_author(L).
 key_words(["title", "of" | L],L) :-
     search_title(L).
 key_words(["genre", "of" | L],L) :-
     search_genre(L).
+key_words(["in", "the", "genre", "of" | L],L) :-
+    search_five_books(L).
 key_words(["description", "of" | L],L) :-
     search_description(L).
-key_words(["five", "results", "for" | L], L) :-
-    create_url(L, URL),
-    call_api(URL).
+key_words(["five", "search", "results", "for" | L], L) :-
+    search_five_books(L).
+% key_words(L,L).
 
 search_author(Terms) :-
     create_url(Terms, URL),
@@ -87,6 +98,10 @@ search_description(Terms) :-
     create_url(Terms, URL),
     call_api_description(URL).
 
+search_five_books(Terms) :-
+    create_url(Terms, URL),
+    call_api(URL).
+
 
 % question(Question,QR) is true if Query provides an answer
 question(["What","is" | L0], L1) :-
@@ -97,33 +112,23 @@ question(["Who", "is" | L0],L1) :-
     sentence(L0,L1).
 question(["Who"  | L0],L1) :-
     sentence(L0,L1).
-question(["What", "kind" | L0],L1) :-
+question(["What", "kind", "of"| L0],L1) :-
+    sentence(L0,L1).
+question(["What", "are" | L0],L1) :-
     sentence(L0,L1).
 question(["Give", "me" | L0],L1) :-
     sentence(L0,L1).
 question(["I", "want" | L0],L1) :-
     sentence(L0,L1).
+question(["Tell", "me" | L0],L1) :-
+    sentence(L0,L1).
 
 % ask(Q) calls api to answer question Q
 ask(Q) :-
-% TODO: fix the bug that caused question(Q, []) to returns false
     question(Q, A).
 
 
 % To get the input from a line:
-
-q(Ans) :-
-    write("Please ask questions related to book titles, authors, or genres: "), nl, nl,
-    read_line_to_string(user_input, St), 
-    split_string(St, " -", " ,?.!-", Ln), % ignore punctuation
-    ask(Ln).
-q(Ans) :-
-    write("No more answers.\n").
-    q(Ans).
-
-/*
-
-to replace q(Ans):
 
 query_api :-
     write("Please ask questions related to book titles, authors, or genres: "), nl, nl,
@@ -131,20 +136,24 @@ query_api :-
     split_string(St, " -", " ,?.!-", Ln), % ignore punctuation
     ask(Ln).
 
+/*
 --> if you want "No more answers", add it in call_api (see comments there)
 
 --> for looping in main, nothing here (see [main].)
 
 
-/*
+
 
 Possible queries:
 
-- Give me the first five results for To Kill a Mockingbird.
+- Give me the first five search results for To Kill a Mockingbird.
 - What is an interesting book written by Madeline Miller?
 - Who wrote The Catcher in the Rye?
 - Who is the author of The Catcher in the Rye?
 - I want the description of Anna Karenina.
 - What is the genre of The Book Thief?
-
+- What are some books in the genre of romance?
+- What kind of books are written by Marget Atwood?
+- What is the title of a book written by Stephen King?
+- Tell me more information about The Great Gatsby.
 */
