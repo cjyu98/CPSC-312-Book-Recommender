@@ -58,12 +58,15 @@ write_list([H|T]) :-
     write(", "),
     write_list(T).   
 
-% call api to print out book arthor
-call_api_author(URL) :-
+read_api(URL, Books) :-
     http_open(URL, Input_stream, []),
  	json_read_dict(Input_stream, Dict),
  	close(Input_stream),
-    json_to_book_description(Dict, Books),
+    json_to_book_description(Dict, Books).
+
+% call api to print out book arthor
+call_api_author(URL) :-
+    read_api(URL, Books),
     write_author_name(Books).
 
 % writes out the author name
@@ -75,10 +78,7 @@ write_author_name([Book|_]) :-
 
 % call api to print out book title
 call_api_title(URL) :-
-    http_open(URL, Input_stream, []),
- 	json_read_dict(Input_stream, Dict),
- 	close(Input_stream),
-    json_to_book_description(Dict, Books),
+    read_api(URL, Books),
     write_title(Books).
 
 % writes out the book title
@@ -90,10 +90,7 @@ write_title([Book|_]) :-
 
 % call api to print out book genre
 call_api_genre(URL) :-
-    http_open(URL, Input_stream, []),
- 	json_read_dict(Input_stream, Dict),
- 	close(Input_stream),
-    json_to_book_description(Dict, Books),
+    read_api(URL, Books),
     write_genre(Books).
 
 % writes out the book genre
@@ -103,6 +100,15 @@ write_genre([Book|_]) :-
     write('Genre(s): '),
     write_list(Genre).
 
+call_api_description(URL) :-
+    read_api(URL, Books),
+    write_description(Books).
+
+write_description([]).
+write_description([Book|_]) :-
+    Description = Book.volumeInfo.description,
+    write('Description: '),
+    write(Description).
 
 %% Building URL %%
 
