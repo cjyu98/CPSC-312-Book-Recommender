@@ -162,7 +162,7 @@ find_books(AnsGenre, AnsPages, AnsRating):-
     findall([Title,Author], recommend(AnsGenre, AnsPages, AnsRating, Title, Author), Results),
     length(Results, Total),
     randset(5, Total, [A,B,C,D,E]),
-    nth1(A, Results, [Title1, Author1]),
+    nth1(A, Results, [Title1, Author1]), %need nth1 because randset returns between 1...N
     nth1(B, Results, [Title2, Author2]),
     nth1(C, Results, [Title3, Author3]),
     nth1(D, Results, [Title4, Author4]),

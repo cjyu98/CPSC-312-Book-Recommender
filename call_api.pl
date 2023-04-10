@@ -70,7 +70,7 @@ call_api_author(URL) :-
     write_author_name(Books).
 
 % writes out the author name
-write_author_name([]).
+write_author_name([]). % add write('No more answers') here!
 write_author_name([Book|_]) :-
     Author = Book.volumeInfo.authors,
     write('Author(s): '),
@@ -82,7 +82,7 @@ call_api_title(URL) :-
     write_title(Books).
 
 % writes out the book title
-write_title([]).
+write_title([]). % add write('No more answers') here!
 write_title([Book|_]) :-
     Title = Book.volumeInfo.title,
     write('Title: '),
@@ -94,7 +94,7 @@ call_api_genre(URL) :-
     write_genre(Books).
 
 % writes out the book genre
-write_genre([]).
+write_genre([]). % add write('No more answers') here!
 write_genre([Book|_]) :-
     Genre = Book.volumeInfo.categories,
     write('Genre(s): '),

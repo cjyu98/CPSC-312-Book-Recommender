@@ -121,6 +121,20 @@ q(Ans) :-
     write("No more answers.\n").
     q(Ans).
 
+/*
+
+to replace q(Ans):
+
+query_api :-
+    write("Please ask questions related to book titles, authors, or genres: "), nl, nl,
+    read_line_to_string(user_input, St), 
+    split_string(St, " -", " ,?.!-", Ln), % ignore punctuation
+    ask(Ln).
+
+--> if you want "No more answers", add it in call_api (see comments there)
+
+--> for looping in main, nothing here (see [main].)
+
 
 /*
 

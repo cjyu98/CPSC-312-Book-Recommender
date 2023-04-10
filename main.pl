@@ -52,9 +52,9 @@ check_ans(0):-
     main_menu.
 
 % TODO: search API case once other file is done
-check_ans(1):-
-    % call the other file
-    [search].
+%check_ans(1):-
+    % query_api,
+    % main_menu. (this will do the loop work!)
 
 
 % exit case
