@@ -51,10 +51,10 @@ check_ans(0):-
     start_rec, nl,
     main_menu.
 
-% TODO: search API case once other file is done
-%check_ans(1):-
-    % query_api,
-    % main_menu. (this will do the loop work!)
+% search API case 
+check_ans(1):-
+    query_api, nl, nl,
+    main_menu. 
 
 
 % exit case

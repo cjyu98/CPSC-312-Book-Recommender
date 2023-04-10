@@ -3,6 +3,21 @@
 %         https://www.cs.ubc.ca/~poole/cs312/2023/prolog/cfg_simple.pl
 %         https://www.cs.ubc.ca/~poole/cs312/2023/prolog/geography_string.pl
 
+
+/*
+
+Possible queries:
+
+- Give me the first five results for To Kill a Mockingbird.
+- What is an interesting book written by Madeline Miller?
+- Who wrote The Catcher in the Rye?
+- Who is the author of The Catcher in the Rye?
+- I want the description of Anna Karenina.
+- What is the genre of The Book Thief?
+
+*/
+
+
 % noun_phrase(L0,L4) is true if
 %  L0 and L4 are list of words, such that
 %        L4 is an ending of L0
@@ -18,8 +33,8 @@ noun_phrase(L0,L3) :-
 
 % a verb phrase is a verb followed by a noun phrase and an optional pp
 verb_phrase(L0,L2) :- 
-   verb(L0,L1), 
-   key_words(L1,L2).
+    verb(L0,L1), 
+    key_words(L1,L2).
 
 
 verb(["written", "by" | L],L) :-
@@ -48,8 +63,8 @@ adjectives(L0,L2) :-
 
 % a sentence is a noun phrase followed by a verb phrase.
 sentence(L0,L2) :- 
-   noun_phrase(L0,L1), 
-   verb_phrase(L1,L2).
+    noun_phrase(L0,L1), 
+    verb_phrase(L1,L2).
    
 
 % DICTIONARY
@@ -74,6 +89,7 @@ key_words(["five", "results", "for" | L], L) :-
 search_author(Terms) :-
     create_url(Terms, URL),
     call_api_author(URL).
+
 
 search_title(Terms) :-
     create_url(Terms, URL),
@@ -104,47 +120,19 @@ question(["Give", "me" | L0],L1) :-
 question(["I", "want" | L0],L1) :-
     sentence(L0,L1).
 
+question(_, []). % for when the other list is empty
+
 % ask(Q) calls api to answer question Q
 ask(Q) :-
-% TODO: fix the bug that caused question(Q, []) to returns false
-    question(Q, A).
+    question(Q, _).
 
 
-% To get the input from a line:
 
-q(Ans) :-
+query_api:-
     write("Please ask questions related to book titles, authors, or genres: "), nl, nl,
-    read_line_to_string(user_input, St), 
-    split_string(St, " -", " ,?.!-", Ln), % ignore punctuation
-    ask(Ln).
-q(Ans) :-
-    write("No more answers.\n").
-    q(Ans).
-
-/*
-
-to replace q(Ans):
-
-query_api :-
-    write("Please ask questions related to book titles, authors, or genres: "), nl, nl,
-    read_line_to_string(user_input, St), 
+    read(St), 
     split_string(St, " -", " ,?.!-", Ln), % ignore punctuation
     ask(Ln).
 
---> if you want "No more answers", add it in call_api (see comments there)
-
---> for looping in main, nothing here (see [main].)
 
 
-/*
-
-Possible queries:
-
-- Give me the first five results for To Kill a Mockingbird.
-- What is an interesting book written by Madeline Miller?
-- Who wrote The Catcher in the Rye?
-- Who is the author of The Catcher in the Rye?
-- I want the description of Anna Karenina.
-- What is the genre of The Book Thief?
-
-*/

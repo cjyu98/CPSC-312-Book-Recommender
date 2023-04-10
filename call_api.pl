@@ -74,7 +74,7 @@ write_author_name([]). % add write('No more answers') here!
 write_author_name([Book|_]) :-
     Author = Book.volumeInfo.authors,
     write('Author(s): '),
-    write_list(Author).
+    write_list(Author).  % you never complete
 
 % call api to print out book title
 call_api_title(URL) :-
@@ -120,14 +120,20 @@ create_url(Terms, URL) :-
     append_search_term(Terms, Root, URL).
 
 % base case
-append_search_term([], URL, URL).
+append_search_term([],URL,URL_final):-
+    apikey(Key),
+    %string_concat(URL, Last, URL1),
+    string_concat(URL, '&maxResults=5&key=', URL2),
+    string_concat(URL2, Key, URL_final).
 
+/*
 % append last search term and API key to URL
 append_search_term([Last], URL, URL_final) :-
     apikey(Key),
     string_concat(URL, Last, URL1),
-    string_concat(URL1, "&maxResults=5&key=", URL2),
+    string_concat(URL1, '&maxResults=5&key=', URL2),
     string_concat(URL2, Key, URL_final).
+*/
 
 % recursive case: append next search term
 append_search_term([Term|T], URL, URL_final) :-
@@ -135,7 +141,5 @@ append_search_term([Term|T], URL, URL_final) :-
     string_concat(URL1,"+",URL2),
     append_search_term(T, URL2, URL_final).
 
-
-    
 
 
