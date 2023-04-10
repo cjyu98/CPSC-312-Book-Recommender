@@ -30,6 +30,7 @@ verb(L,L).
 
 
 noun(["book" | L],L).
+% noun(["name", "of" | L] L).
 noun(L,L).
 
 % determiners
@@ -55,7 +56,7 @@ sentence(L0,L2) :-
 % adj(L0,L1) is true if L0-L1 is an adjective
 adj(["interesting" | L],L).
 adj(["cool" | L],L).
-adj(["top",  "result", "of" | L],L).
+adj(["first" | L],L).
 
 
 key_words(["author", "of" | L],L) :-
@@ -64,6 +65,11 @@ key_words(["title", "of" | L],L) :-
     search_title(L).
 key_words(["genre", "of" | L],L) :-
     search_genre(L).
+key_words(["description", "of" | L],L) :-
+    search_description(L).
+key_words(["five", "results", "for" | L], L) :-
+    create_url(L, URL),
+    call_api(URL).
 
 search_author(Terms) :-
     create_url(Terms, URL),
@@ -77,6 +83,10 @@ search_genre(Terms) :-
     create_url(Terms, URL),
     call_api_genre(URL).
 
+search_description(Terms) :-
+    create_url(Terms, URL),
+    call_api_description(URL).
+
 
 % question(Question,QR) is true if Query provides an answer
 question(["What","is" | L0], L1) :-
@@ -89,7 +99,9 @@ question(["Who"  | L0],L1) :-
     sentence(L0,L1).
 question(["What", "kind" | L0],L1) :-
     sentence(L0,L1).
-question(["Give me" | L0],L1) :-
+question(["Give", "me" | L0],L1) :-
+    sentence(L0,L1).
+question(["I", "want" | L0],L1) :-
     sentence(L0,L1).
 
 % ask(Q) calls api to answer question Q
@@ -104,8 +116,21 @@ q(Ans) :-
     write("Please ask questions related to book titles, authors, or genres: "), nl, nl,
     read_line_to_string(user_input, St), 
     split_string(St, " -", " ,?.!-", Ln), % ignore punctuation
-    ask(Ln), nl.
+    ask(Ln).
 q(Ans) :-
-    write("No more answers\n"),
+    write("No more answers.\n").
     q(Ans).
 
+
+/*
+
+Possible queries:
+
+- Give me the first five results for To Kill a Mockingbird.
+- What is an interesting book written by Madeline Miller?
+- Who wrote The Catcher in the Rye?
+- Who is the author of The Catcher in the Rye?
+- I want the description of Anna Karenina.
+- What is the genre of The Book Thief?
+
+*/
