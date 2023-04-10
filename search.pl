@@ -33,18 +33,23 @@ noun_phrase(L0,L3) :-
 
 % a verb phrase is a verb followed by a noun phrase and an optional pp
 verb_phrase(L0,L2) :- 
-    verb(L0,L1), 
-    key_words(L1,L2).
+   verb(L0,L1),
+   key_words(L1,L2).
 
 
 verb(["written", "by" | L],L) :-
     search_title(L).
+verb(["are", "written", "by" | L],L) :-
+    search_genre(L).
 verb(["wrote" | L],L) :-
     search_author(L).
+verb(["are"| L], L).
 verb(L,L).
 
 
 noun(["book" | L],L).
+noun(["a", "book" | L],L).
+noun(["books" | L],L).
 % noun(["name", "of" | L] L).
 noun(L,L).
 
@@ -70,21 +75,27 @@ sentence(L0,L2) :-
 % DICTIONARY
 % adj(L0,L1) is true if L0-L1 is an adjective
 adj(["interesting" | L],L).
-adj(["cool" | L],L).
+adj(["exciting" | L],L).
 adj(["first" | L],L).
+adj(["title", "of" | L],L).
+adj(["some" | L], L).
+adj(["more" | L], L).
 
-
+key_words(["information", "about" | L],L) :-
+    search_description(L).
 key_words(["author", "of" | L],L) :-
     search_author(L).
 key_words(["title", "of" | L],L) :-
     search_title(L).
 key_words(["genre", "of" | L],L) :-
     search_genre(L).
+key_words(["in", "the", "genre", "of" | L],L) :-
+    search_five_books(L).
 key_words(["description", "of" | L],L) :-
     search_description(L).
-key_words(["five", "results", "for" | L], L) :-
-    create_url(L, URL),
-    call_api(URL).
+key_words(["five", "search", "results", "for" | L], L) :-
+    search_five_books(L).
+% key_words(L,L).
 
 search_author(Terms) :-
     create_url(Terms, URL),
@@ -103,6 +114,10 @@ search_description(Terms) :-
     create_url(Terms, URL),
     call_api_description(URL).
 
+search_five_books(Terms) :-
+    create_url(Terms, URL),
+    call_api(URL).
+
 
 % question(Question,QR) is true if Query provides an answer
 question(["What","is" | L0], L1) :-
@@ -113,12 +128,20 @@ question(["Who", "is" | L0],L1) :-
     sentence(L0,L1).
 question(["Who"  | L0],L1) :-
     sentence(L0,L1).
-question(["What", "kind" | L0],L1) :-
+question(["What", "kind", "of"| L0],L1) :-
+    sentence(L0,L1).
+question(["What", "are" | L0],L1) :-
     sentence(L0,L1).
 question(["Give", "me" | L0],L1) :-
     sentence(L0,L1).
 question(["I", "want" | L0],L1) :-
     sentence(L0,L1).
+question(["Tell", "me" | L0],L1) :-
+    sentence(L0,L1).
+question(["Tell", "me" | L0],L1) :-
+    sentence(L0,L1).
+
+question(_, []). % for when the other list is empty
 
 question(_, []). % for when the other list is empty
 
