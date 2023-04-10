@@ -4,16 +4,16 @@ Authors: Gloria Mo, Christine Yang, Carmen Yu
 Created for [UBC CPSC 312 2023W](https://wiki.ubc.ca/CPSC312-2023-Book-Recommender).
 
 ## TODO
-
-* update building URL with &maxResults=5 included
-* create file to ask questions from user and do recommendations
-* create file to parse query from user to pass to API
 * combine, update main file, debug
 * finish README
 * write description for wiki
 
 # Description
-TODO
+A book recommender system with two features.
+
+1. A recommendation system that prompts users to answer various questions about their preference of book genres, lengths, and ratings and searches the library (knowledge base) for five books that meets the criteria.
+
+2. A search system for users to ask queries related to books and answers them based upon information retrieved from Google Books API. Certain restrictions exist for working with the API, and the details and explanations are outlined in the UBC Wiki.
 
 
 # Instructions
@@ -27,6 +27,12 @@ TODO
 
 ## Dataset
 * https://www.kaggle.com/datasets/arnabchaki/goodreads-best-books-ever
+
+## Code
+* https://www.cs.ubc.ca/~poole/cs312/2023/prolog/geography_query_string.pl
+* https://www.cs.ubc.ca/~poole/cs312/2023/prolog/cfg_simple.pl
+* https://www.cs.ubc.ca/~poole/cs312/2023/prolog/geography_string.pl
+* https://github.com/jxwuu/song-recommender
 
 ## Other Links
 * https://www.swi-prolog.org/pldoc/man?section=jsonsupport
