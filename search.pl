@@ -153,8 +153,6 @@ ask(Q) :-
 % asks for user input and calls the api 
 query_api:-
     write("Please ask questions related to book titles, authors, or genres: "), nl, nl,
-    %read(St),
-    
     catch(
         read(St),
         error(syntax_error(_), _),
@@ -166,8 +164,6 @@ query_api:-
         error(type_error(_,_), _),
         (writeln('Invalid input!'), nl, main_menu)
     ),
-    
-    %split_string(St, " -", " ,?.!-", Ln), % ignore punctuation
     ask(Ln).
 
 
