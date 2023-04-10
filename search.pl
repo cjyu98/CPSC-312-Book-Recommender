@@ -143,14 +143,13 @@ question(["Tell", "me" | L0],L1) :-
 
 question(_, []). % for when the other list is empty
 
-question(_, []). % for when the other list is empty
 
 % ask(Q) calls api to answer question Q
 ask(Q) :-
     question(Q, _).
 
 
-
+% asks for user input and calls the api 
 query_api:-
     write("Please ask questions related to book titles, authors, or genres: "), nl, nl,
     read(St), 
