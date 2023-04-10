@@ -14,9 +14,13 @@ start_rec :-
     ask_rating(AnsRating), nl,
     write('Please wait momentarily while we browse our library...'), nl,
     write('We recommend the following books: '), nl, nl,
+    find_books(AnsGenre, AnsPages, AnsRating).
+
+    /*
     forall(limit(5, distinct(recommend(AnsGenre, AnsPages, AnsRating, B, A))),
     (atomic_list_concat([B, A], ' written by ', F),
     write(F), nl)).
+    */
 
 %% GENRE %%
 
@@ -153,5 +157,21 @@ recommend(AnsGenre, AnsPages, AnsRating, BookTitle, Author) :-
     question_rating(AnsRating, ID).
 
 
+% finds all predicates and selects a random 5
+find_books(AnsGenre, AnsPages, AnsRating):-
+    findall([Title,Author], recommend(AnsGenre, AnsPages, AnsRating, Title, Author), Results),
+    length(Results, Total),
+    randset(5, Total, [A,B,C,D,E]),
+    nth1(A, Results, [Title1, Author1]),
+    nth1(B, Results, [Title2, Author2]),
+    nth1(C, Results, [Title3, Author3]),
+    nth1(D, Results, [Title4, Author4]),
+    nth1(E, Results, [Title5, Author5]),
+    print_results([Title1, Title2, Title3, Title4, Title5], [Author1, Author2, Author3, Author4, Author5]).
 
-
+% prints the results
+print_results([],[]).
+print_results([B|T1], [A|T2]):-
+    atomic_list_concat([B, A], ' written by ', F),
+    write(F), nl,
+    print_results(T1, T2).
