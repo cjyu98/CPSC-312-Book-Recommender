@@ -8,12 +8,16 @@
 
 Possible queries:
 
-- Give me the first five results for To Kill a Mockingbird.
+- Give me the first five search results for To Kill a Mockingbird.
 - What is an interesting book written by Madeline Miller?
 - Who wrote The Catcher in the Rye?
 - Who is the author of The Catcher in the Rye?
 - I want the description of Anna Karenina.
 - What is the genre of The Book Thief?
+- What are some books in the genre of romance?
+- What type of books are written by Marget Atwood?
+- What is the title of a book written by Stephen King?
+- Tell me more information about The Great Gatsby.
 
 */
 
@@ -101,7 +105,6 @@ search_author(Terms) :-
     create_url(Terms, URL),
     call_api_author(URL).
 
-
 search_title(Terms) :-
     create_url(Terms, URL),
     call_api_title(URL).
@@ -128,15 +131,13 @@ question(["Who", "is" | L0],L1) :-
     sentence(L0,L1).
 question(["Who"  | L0],L1) :-
     sentence(L0,L1).
-question(["What", "kind", "of"| L0],L1) :-
+question(["What", "type", "of"| L0],L1) :-
     sentence(L0,L1).
 question(["What", "are" | L0],L1) :-
     sentence(L0,L1).
 question(["Give", "me" | L0],L1) :-
     sentence(L0,L1).
 question(["I", "want" | L0],L1) :-
-    sentence(L0,L1).
-question(["Tell", "me" | L0],L1) :-
     sentence(L0,L1).
 question(["Tell", "me" | L0],L1) :-
     sentence(L0,L1).
@@ -151,7 +152,7 @@ ask(Q) :-
 
 % asks for user input and calls the api 
 query_api:-
-    write("Please ask questions related to book titles, authors, or genres: "), nl, nl,
+    write("Please ask a query related to book titles, authors, or genres. Remember to wrap the query in quotation marks followed by a period: "), nl, nl,
     read(St), 
     split_string(St, " -", " ,?.!-", Ln), % ignore punctuation
     ask(Ln).
