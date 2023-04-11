@@ -21,6 +21,7 @@ Possible queries:
 - What type of books are written by Marget Atwood?
 - What is the title of a book written by Stephen King?
 - Tell me more information about The Great Gatsby.
+- Give me some exciting books in the genre of mystery.
 
 */
 
@@ -160,7 +161,6 @@ verb(L,L).
 noun(["book" | L],L).
 noun(["a", "book" | L],L).
 noun(["books" | L],L).
-% noun(["name", "of" | L] L).
 noun(L,L).
 
 % det(L0,L1) is true if L0-L1 is a determiner

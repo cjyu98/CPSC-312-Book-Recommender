@@ -1,6 +1,8 @@
 % asks user a series of questions about genre, pages, and rating for book recommendations
 :- [csv_kb].
 
+% Referenced recommend.pl in Film Recommendation System by Shijia Su and Tom Mo in CPSC312-2021
+% Citation: https://github.com/sussica/Film-Recommendation-System
 
 % start_rec
 % starts the book recommendation system, collects the user_input to find the books.
@@ -167,7 +169,6 @@ question_rating(2, ID) :-
 % recommend
 % find books in the knowledge base to recommend based on answers from user
 recommend(AnsGenre, AnsPages, AnsRating, BookTitle, Author) :-
-    %init_books, % remove as we integrate into main
     book(ID, title, BookTitle),
     book(ID, author, Author),
     question_genre(AnsGenre, ID),
