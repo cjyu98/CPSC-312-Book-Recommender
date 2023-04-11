@@ -2,8 +2,8 @@
 :- [csv_kb].
 
 
-
-% starts the book recommendation system
+% start_rec
+% starts the book recommendation system, collects the user_input to find the books.
 start_rec :- 
     nl, nl,
     write('Welcome to the book recommendation system. We will recommend 5 books from a collection of best books from Goodreads.'), nl,
@@ -15,15 +15,12 @@ start_rec :-
     write('We recommend the following books: '), nl, nl,
     find_books(AnsGenre, AnsPages, AnsRating).
 
-    /*
-    forall(limit(5, distinct(recommend(AnsGenre, AnsPages, AnsRating, B, A))),
-    (atomic_list_concat([B, A], ' written by ', F),
-    write(F), nl)).
-    */
+ 
 
 %% GENRE %%
 
-% asks the genre options
+% ask_genre
+% asks the user which genre options they are interested in, collects user input
 ask_genre(AnsGenre) :-
     write('What book genre are you interested in?'), nl,
     write('1. Fiction'),nl,
@@ -43,13 +40,15 @@ ask_genre(AnsGenre) :-
           ask_genre(AnsGenre)
     ).
 
-% checks input for the genre
+% check_ans_genre
+% checks user input for the corresponding genre
 check_ans_genre(Ans) :- 
     member(Ans, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).
 
 %% PAGES %%
 
-% asks the pages options
+% ask_pages
+% asks the user which number of pages options they are interested in, collects user input
 ask_pages(AnsPages) :-
     write('How many pages are you looking for?'), nl,
     write('1. Less than 200 pages'),nl,
@@ -62,14 +61,16 @@ ask_pages(AnsPages) :-
           ask_pages(AnsPages)
     ).
 
-% checks input for the number of pages
+% check_ans_pages
+% checks user input for the corresponding number range of pages
 check_ans_pages(Ans) :- 
     member(Ans, [1, 2, 3]).
 
 
 %% RATING %%
 
-% asks the rating options
+% ask_rating
+% asks the user for which rating options they are interested in, collects user input
 ask_rating(AnsRating) :-
     write('Do you prefer books with higher ratings?'), nl,
     write('1. Yes (4 stars and above)'),nl,
@@ -81,6 +82,7 @@ ask_rating(AnsRating) :-
           ask_rating(AnsRating)
     ).
 
+% check_ans_rating
 % checks input for the rating
 check_ans_rating(Ans) :- 
     member(Ans, [1, 2]).
@@ -88,39 +90,50 @@ check_ans_rating(Ans) :-
 
 %% Finding Predicates %%
 
-% genres
+% Finding genres
+
+% question_genre(1, ID) is true if the book has fiction listed as a genre
 question_genre(1, ID) :-
     book(ID, genre, 'Fiction').
 
+% question_genre(2, ID) is true if the book has science fiction listed as a genre
 question_genre(2, ID) :-
     book(ID, genre, 'Science Fiction').
 
+% question_genre(3, ID) is true if the book has romance listed as a genre
 question_genre(3, ID) :-
     book(ID, genre, 'Romance').
 
+% question_genre(4, ID) is true if the book has young adult listed as a genre
 question_genre(4, ID) :-
     book(ID, genre, 'Young Adult').
 
+% question_genre(5, ID) is true if the book has fantasy listed as a genre
 question_genre(5, ID) :-
     book(ID, genre, 'Fantasy').
 
+% question_genre(6, ID) is true if the book has horror listed as a genre
 question_genre(6, ID) :-
     book(ID, genre, 'Horror').
 
+% question_genre(7, ID) is true if the book has thriller listed as a genre
 question_genre(7, ID) :-
     book(ID, genre, 'Thiller').
 
+% question_genre(8, ID) is true if the book has mystery listed as a genre
 question_genre(8, ID) :-
     book(ID, genre, 'Mystery').
 
+% question_genre(9, ID) is true if the book has adventure listed as a genre
 question_genre(9, ID) :-
     book(ID, genre, 'Adventure').
 
+% question_genre(0, ID) is true if the book has classics listed as a genre
 question_genre(0, ID) :-
     book(ID, genre, 'Classics').
 
 
-% pages
+% Finding pages
 
 % question_pages(1, ID) is true if the number of pages of book is below 200
 question_pages(1, ID) :-
@@ -138,7 +151,7 @@ question_pages(3, ID) :-
     book(ID, pages, P),
     P > 400.
 
-% rating
+% Finding rating
 
 % question_rating(1, ID) is true if the book rating is above 4
 question_rating(1, ID) :-
@@ -151,7 +164,8 @@ question_rating(2, ID) :-
     R < 4.
 
 
-% recommend based on answers
+% recommend
+% find books in the knowledge base to recommend based on answers from user
 recommend(AnsGenre, AnsPages, AnsRating, BookTitle, Author) :-
     %init_books, % remove as we integrate into main
     book(ID, title, BookTitle),
@@ -160,8 +174,8 @@ recommend(AnsGenre, AnsPages, AnsRating, BookTitle, Author) :-
     question_pages(AnsPages, ID),
     question_rating(AnsRating, ID).
 
-
-% finds all predicates and selects a random 5
+% find_books
+% finds all predicates that fit the criteria, selects and prints a random 5 books from that list
 find_books(AnsGenre, AnsPages, AnsRating):-
     findall([Title,Author], recommend(AnsGenre, AnsPages, AnsRating, Title, Author), Results),
     length(Results, Total),
@@ -173,7 +187,8 @@ find_books(AnsGenre, AnsPages, AnsRating):-
     nth1(E, Results, [Title5, Author5]),
     print_results([Title1, Title2, Title3, Title4, Title5], [Author1, Author2, Author3, Author4, Author5]).
 
-% prints the results
+% print_results
+% prints the results of the 5 books selected to be recommended
 print_results([],[]).
 print_results([B|T1], [A|T2]):-
     atomic_list_concat([B, A], ' written by ', F),

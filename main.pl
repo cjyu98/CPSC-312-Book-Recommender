@@ -20,35 +20,42 @@ url_root('https://www.googleapis.com/books/v1/volumes?q=').
 :- [recommend].
 :- [search].
 
-
-% initialize knowledge base
+% initialize
+% initialize knowledge base from csv file
 initialize:-
     writeln('Please wait as we load the database...'), nl,
     init_books.
 
-% starts the application
+% start
+% starts the application by loading the knowledge base and starting the main menu
 start:-
     initialize,
     writeln('Welcome to our book recommendation and search system!'), nl,
     main_menu.
 
 
-% main menu
+% main_menu
+% write out the main menu
 main_menu:-
+    % write options
     writeln('If you would like to receive some recommendations, enter 0.'),
     writeln('If you would like to ask a query, enter 1.'),
     writeln('If you would like to exit, enter 2.'),
     writeln('Please note that your input must end with a period.'), % #justprologthings
     write('Enter your answer here: '),
-    % read(Ans), nl,
+
+    % catch syntax error for reading user input
     catch(
         read(Ans),
         error(syntax_error(_), _),
         (writeln('Input not applicable. Please re-enter.'), nl, main_menu)
     ), nl,
+
+    % check which option was selected
     check_ans(Ans).
 
-% checks the user input and directs to appropriate calls
+% check_ans(Option), where option is the user input from main menu of which feature they are using
+% checks the user input and directs to appropriate calls, loops back to main menu once completed
 
 % recommendation case
 check_ans(0):- 
@@ -60,12 +67,12 @@ check_ans(1):-
     query_api, nl, nl,
     main_menu. 
 
-% exit case
+% exit application case
 check_ans(2):-
     writeln('Thank you for using our system! Bye!'), nl,
     halt.
 
-% wrong input case
+% invalid input case
 check_ans(_):-
     writeln('Input not applicable. Please re-enter.'), nl,
     main_menu.

@@ -9,20 +9,25 @@
 % csv file has been modified to add an ID for our knowledge base
 % column names in csv: ID, title, series, author, rating, description, language, isbn, genres, characters, bookFormat, edition, pages, publisher, publishDate, firstPublishDate, awards, numRatings, ratingsByStars, likedPercent, setting, bbeScore, bbeVotes, price
 
-% initialize the process from csv to knowledge base
+% init_books
+% initialize the process reading csv to predicates in the knowledge base
 init_books:-
     csv_read_file('books.csv', Rows, [arity(24)]),
     maplist(assert, Rows),
     rows_to_predicate(Rows).
 
 
-% change the rows to predicate
+% rows_to_predicate(Rows), where Rows is the rows read from the CSV file 
+% Rows = [row(feature1, feature2,...), row()..]
+% change the rows from the CSV file to predicates
 rows_to_predicate([]).
 rows_to_predicate([row(ID, Title,_,Author,Rating, Description,_,_,Genres,_,_,_,Pages,_, _,_,_,_,_, _,_,_,_,_)|T]):-
     add_book(ID,Title,Author,Rating, Description,Genres, Pages),
     rows_to_predicate(T).
 
-% adds the books for each row as a predicate 
+% add_book(ID,Title,Author,Rating, Description,Genres, Pages)
+% adds the books from each row with predicates for each category
+
 % base cases for blanks in the csv, returns true
 add_book('',_,_,_,_,_,_).
 add_book(_,'',_,_,_,_,_).
@@ -43,7 +48,8 @@ add_book(ID,Title,Author,Rating, Description,Genres, Pages):-
     add_genre(ID, GenreList).
 
 
-% adds the predicate for each genre
+% add_genre
+% adds a predicate for each genre listed for each book
 add_genre(_,[]).
 add_genre(ID, [H|T]):-
     assert(book(ID, genre, H)),
