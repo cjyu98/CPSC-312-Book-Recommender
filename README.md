@@ -8,7 +8,7 @@ A book recommender system with two features.
 
 1. A recommendation system that prompts users to answer various questions about their preference of book genres, lengths, and ratings and searches the library (knowledge base) for five books that meets the criteria.
 
-2. A search system for users to ask queries related to books and answers them based upon information retrieved from Google Books API. Certain restrictions exist for working with the API, and the details and explanations are outlined in the UBC Wiki.
+2. A search system for users to ask queries related to books and answers them based upon information retrieved from Google Books API. Certain restrictions exist for working with the API. Additional details and explanations are outlined in the [UBC Wiki](https://wiki.ubc.ca/CPSC312-2023-Book-Recommender).
 
 
 # Instructions
