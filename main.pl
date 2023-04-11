@@ -33,15 +33,19 @@ start:-
     main_menu.
 
 
-% TODO: figure out if there is better wording idk
 % main menu
 main_menu:-
     writeln('If you would like to receive some recommendations, enter 0.'),
-    writeln('If you would like to enter some search terms, enter 1.'),
+    writeln('If you would like to ask a query, enter 1.'),
     writeln('If you would like to exit, enter 2.'),
     writeln('Please note that your input must end with a period.'), % #justprologthings
     write('Enter your answer here: '),
-    read(Ans), nl,
+    % read(Ans), nl,
+    catch(
+        read(Ans),
+        error(syntax_error(_), _),
+        (writeln('Input not applicable. Please re-enter.'), nl, main_menu)
+    ), nl,
     check_ans(Ans).
 
 % checks the user input and directs to appropriate calls
@@ -56,12 +60,10 @@ check_ans(1):-
     query_api, nl, nl,
     main_menu. 
 
-
 % exit case
 check_ans(2):-
-    writeln('Thank you for using our system! Bye!'),
+    writeln('Thank you for using our system! Bye!'), nl,
     halt.
-
 
 % wrong input case
 check_ans(_):-

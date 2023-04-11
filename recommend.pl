@@ -2,13 +2,12 @@
 :- [csv_kb].
 
 
-% TODO: handle invalid input
-% TODO: some cases return error when not enough search results?
 
-
+% starts the book recommendation system
 start_rec :- 
     nl, nl,
-    write('Welcome to the book recommendation system. We will recommend 5 books from a collection of best books from Goodreads. Please answer the following questions by entering the corresponding number followed by a period!'), nl, nl,
+    write('Welcome to the book recommendation system. We will recommend 5 books from a collection of best books from Goodreads.'), nl,
+    write('Please answer the following questions by entering the corresponding number followed by a period!'), nl, nl,
     ask_genre(AnsGenre), nl,
     ask_pages(AnsPages), nl,
     ask_rating(AnsRating), nl,
@@ -52,7 +51,7 @@ check_ans_genre(Ans) :-
 
 % asks the pages options
 ask_pages(AnsPages) :-
-    write('What pages are you looking for?'), nl,
+    write('How many pages are you looking for?'), nl,
     write('1. Less than 200 pages'),nl,
     write('2. 200 to 400 pages'),nl,
     write('3. More than 400 pages'),nl,
@@ -63,7 +62,7 @@ ask_pages(AnsPages) :-
           ask_pages(AnsPages)
     ).
 
-%checks input for the number of pages
+% checks input for the number of pages
 check_ans_pages(Ans) :- 
     member(Ans, [1, 2, 3]).
 
@@ -89,7 +88,7 @@ check_ans_rating(Ans) :-
 
 %% Finding Predicates %%
 
-% genre
+% genres
 question_genre(1, ID) :-
     book(ID, genre, 'Fiction').
 
@@ -123,25 +122,30 @@ question_genre(0, ID) :-
 
 % pages
 
+% question_pages(1, ID) is true if the number of pages of book is below 200
 question_pages(1, ID) :-
     book(ID, pages, P),
     P < 200.
 
+% question_pages(2, ID) is true if the number of pages of book is between 200 to 400
 question_pages(2, ID) :-
     book(ID, pages, P),
     P > 200,
     P < 400.
 
+% question_pages(3, ID) is true if the number of pages of book is above 400
 question_pages(3, ID) :-
     book(ID, pages, P),
     P > 400.
 
 % rating
 
+% question_rating(1, ID) is true if the book rating is above 4
 question_rating(1, ID) :-
     book(ID, rating, R),
     R > 4.
 
+% question_rating(2, ID) is true if the book rating is below 4
 question_rating(2, ID) :-
     book(ID, rating, R),
     R < 4.

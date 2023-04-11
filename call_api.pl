@@ -58,6 +58,7 @@ write_list([H|T]) :-
     write(", "),
     write_list(T).   
 
+% call the api, parses the returned JSON file
 read_api(URL, Books) :-
     http_open(URL, Input_stream, []),
  	json_read_dict(Input_stream, Dict),
@@ -70,9 +71,11 @@ call_api_author(URL) :-
     write_author_name(Books).
 
 % writes out the author name
-write_author_name([]). % add write('No more answers') here!
+write_author_name([]) :-
+    write('No more answers'). 
 write_author_name([Book|_]) :-
     Author = Book.volumeInfo.authors,
+    nl,
     write('Author(s): '),
     write_list(Author).  % you never complete
 
@@ -82,9 +85,11 @@ call_api_title(URL) :-
     write_title(Books).
 
 % writes out the book title
-write_title([]). % add write('No more answers') here!
+write_title([]) :- 
+    write('No more answers').
 write_title([Book|_]) :-
     Title = Book.volumeInfo.title,
+    nl,
     write('Title: '),
     write(Title).
 
@@ -94,31 +99,37 @@ call_api_genre(URL) :-
     write_genre(Books).
 
 % writes out the book genre
-write_genre([]). % add write('No more answers') here!
+write_genre([]) :- 
+    write('No more answers').
 write_genre([Book|_]) :-
     Genre = Book.volumeInfo.categories,
+    nl,
     write('Genre(s): '),
     write_list(Genre).
 
+% call api to print out book description
 call_api_description(URL) :-
     read_api(URL, Books),
     write_description(Books).
 
+% writes out the book description
 write_description([]).
 write_description([Book|_]) :-
     Description = Book.volumeInfo.description,
+    nl,
     write('Description: '),
     write(Description).
 
 %% Building URL %%
 
-% Create a URL for search term
+% create_url(Terms, URL) create a URL for search terms Terms
 % example query: create_url(["harry", "potter"], URL).
 
 create_url(Terms, URL) :-
     url_root(Root),
     append_search_term(Terms, Root, URL).
 
+% append_search_term(Terms,URL,URL_final) append search term Terms and API key to URL and returns URL_final
 % base case
 append_search_term([],URL,URL_final):-
     apikey(Key),
