@@ -28,6 +28,7 @@ A book recommender system with two features.
 * https://www.cs.ubc.ca/~poole/cs312/2023/prolog/cfg_simple.pl
 * https://www.cs.ubc.ca/~poole/cs312/2023/prolog/geography_string.pl
 * https://github.com/jxwuu/song-recommender
+* https://github.com/sussica/Film-Recommendation-System 
 
 ## Other Links
 * https://www.swi-prolog.org/pldoc/man?section=jsonsupport

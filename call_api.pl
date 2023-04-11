@@ -42,14 +42,6 @@ write_results([Book|T]) :-
     % recursive call
     write_results(T).
 
-/*
-% writes out the authors since it is a list
-write_author([]).
-write_author([H|T]) :-
-    write(H),
-    write(","),
-    write_author(T).
-*/
 
 % writes out the list
 write_list([]).
@@ -130,21 +122,13 @@ create_url(Terms, URL) :-
     append_search_term(Terms, Root, URL).
 
 % append_search_term(Terms,URL,URL_final) append search term Terms and API key to URL and returns URL_final
-% base case
+
+% all terms have been added
 append_search_term([],URL,URL_final):-
     apikey(Key),
     %string_concat(URL, Last, URL1),
     string_concat(URL, '&maxResults=5&key=', URL2),
     string_concat(URL2, Key, URL_final).
-
-/*
-% append last search term and API key to URL
-append_search_term([Last], URL, URL_final) :-
-    apikey(Key),
-    string_concat(URL, Last, URL1),
-    string_concat(URL1, '&maxResults=5&key=', URL2),
-    string_concat(URL2, Key, URL_final).
-*/
 
 % recursive case: append next search term
 append_search_term([Term|T], URL, URL_final) :-
