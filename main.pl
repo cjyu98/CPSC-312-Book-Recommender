@@ -7,7 +7,7 @@
 :- use_module(library(lists)).
 
 % constants
-apikey('AIzaSyCDCSCwN5M95LfkkLtw5wQ8kkaRA-wBYqM'). 
+apikey(''). 
 url_root('https://www.googleapis.com/books/v1/volumes?q=').
 
 % encoding to process the text & accents properly
